@@ -29,7 +29,8 @@ Defined in `extension/core/clean.js` (the single source of truth):
 - Hosts: `x.com` and `twitter.com`, with optional `www.` or `mobile.` prefix, case-insensitive. Only `http:`/`https:` URLs.
 - On those hosts, every query parameter is removed except `q`, `f`, `pf` and `lf` (needed for `/search`). The `?` goes too if nothing remains.
 - Host, path and `#hash` are preserved byte-for-byte; the original string is edited, not re-serialized.
-- Non-X URLs and invalid strings are returned unchanged.
+- Other sites use a denylist in `SITE_RULES`: only the listed trackers are removed, every other parameter stays. Today that is YouTube (`youtube.com`, `www.`/`m.`/`music.` and `youtu.be`), where `si`, `pp` and `feature` are removed and `t`, `v`, `list`, `index` are kept.
+- URLs on any other host and invalid strings are returned unchanged.
 - `cleanText` finds `http(s)://…` URLs inside larger text and cleans each one, leaving trailing punctuation (`.,;:!?)]}`) alone.
 
 The file works as a classic script (sets `globalThis.UnsnitchCore`) and with `require()`. It has no dependencies and makes no network requests.
@@ -56,7 +57,7 @@ The userscript (`userscript/unsnitch.user.js`) inlines the same core plus the sa
 
 - **Links already shared.** If someone sent you a link with `?s=…&t=…`, that identifying token was created at share time. Cleaning it before you open it avoids sending it to X; it can't undo the share. Paste it into the popup/web app first.
 - **Mobile apps.** Native iOS/Android apps copy links outside the browser, so the extension can't intercept them. Use the [iOS Shortcut or Android web app](mobile.md).
-- **Other places that add trackers.** Only X and Twitter hosts are cleaned. Other sites, shortened links such as `t.co`, and links where the tracking is inside the path are left alone.
+- **Other places that add trackers.** Only X, Twitter and the YouTube rule above are cleaned. Other sites, shortened links such as `t.co`, and links where the tracking is inside the path are left alone.
 - **Search params.** `q`, `f`, `pf` and `lf` are kept so search works; any other parameter is dropped, even a legitimate one.
 - **Logged-in activity is still visible to X.** This only removes share attribution from links. X still sees your account's normal activity when you browse it.
 - **Untested in real browsers so far.** The core has unit tests; the browser wrappers have had only syntax checks and stubbed smoke runs.

@@ -42,7 +42,15 @@ Both links open the same post. The first one also carries a token tied to the sh
 | `a` | `?a=Kq3vX9mPzR2tLw8nYb4c` | A newer share token, also reported to be tied to the sharer. |
 | `ref_src`, `ref_url`, `cn`, `refsrc`, `utm_*` | `?ref_src=twsrc%5Etfw` | Referral and campaign tags from embeds and emails. |
 
-Unsnitch removes **every** query parameter on X links **except** `q`, `f`, `pf` and `lf`, which search URLs need to keep working. The host, the path and any `#hash` stay exactly as they were. **Links to other sites are never modified.**
+Unsnitch removes **every** query parameter on X links **except** `q`, `f`, `pf` and `lf`, which search URLs need to keep working. The host, the path and any `#hash` stay exactly as they were.
+
+**Other sites** use the opposite rule: only known trackers are removed and everything else is kept, so a link never breaks.
+
+| Site | Removed | Kept (examples) |
+| --- | --- | --- |
+| YouTube (`youtube.com`, `www.`, `m.`, `music.`, `youtu.be`) | `si`, `pp`, `feature` | `v`, `list`, `index`, `t` (timestamp) |
+
+Links to any other site are never modified. The extension still only runs on X pages: a YouTube link is cleaned when you copy it from a post on X, in the popup's **Paste & clean** box or in the web cleaner.
 
 ## What it does
 
@@ -152,7 +160,7 @@ Only so the right-click **Copy clean link** item and the popup's **Clean & copy*
 <details>
 <summary><b>Will it touch YouTube, Instagram or other links?</b></summary>
 
-Not yet. Unsnitch only changes `x.com` and `twitter.com` links on purpose. Support for other sites (`igsh`, `si`, …) is a great [first contribution](CONTRIBUTING.md#good-first-issues).
+YouTube links lose their share id (`si`, `pp`, `feature`) and keep everything else, including the `t` timestamp. Every other site is left alone on purpose. Support for more sites (Instagram `igsh`, Spotify `si`, …) is a great [first contribution](CONTRIBUTING.md#good-first-issues).
 </details>
 
 <details>

@@ -50,16 +50,42 @@ test('keeps hash fragment, host and path as-is', () => {
   assert.equal(cleanUrl('https://x.com/a/status/1?'), 'https://x.com/a/status/1');
 });
 
-test('non-X URLs are untouched', () => {
+test('unrelated URLs are untouched', () => {
   const urls = [
-    'https://youtu.be/dQw4w9WgXcQ?si=abcdef',
-    'https://www.youtube.com/watch?v=1&si=abc',
     'https://example.com/?s=20&t=1',
     'https://t.co/abc?s=20',
     'https://api.x.com/a?s=20',
     'ftp://x.com/a?s=20',
   ];
   for (const u of urls) assert.equal(cleanUrl(u), u);
+});
+
+test('YouTube rules remove only share trackers and keep timestamps and playlists', () => {
+  for (const host of ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'music.youtube.com', 'youtu.be']) {
+    assert.equal(
+      cleanUrl(`https://${host}/watch?v=video&si=share&list=playlist&pp=promo&index=2&feature=shared&t=42&custom=a%2Bb#chapter`),
+      `https://${host}/watch?v=video&list=playlist&index=2&t=42&custom=a%2Bb#chapter`
+    );
+    assert.equal(cleanUrl(`https://${host}/video`), `https://${host}/video`);
+    assert.equal(cleanUrl(`https://${host}/video?si=share`), `https://${host}/video`);
+  }
+  assert.equal(cleanUrl('HTTPS://WWW.YouTube.COM/watch?%73i=abc&si=def&t=42&SI=keep'),
+    'HTTPS://WWW.YouTube.COM/watch?t=42&SI=keep');
+  assert.equal(cleanText('Watch https://youtu.be/video?si=share&t=42.'), 'Watch https://youtu.be/video?t=42.');
+  // Empty pairs don't leave a dangling '?' or '&'.
+  assert.equal(cleanUrl('https://youtu.be/video?si=share&'), 'https://youtu.be/video');
+  assert.equal(cleanUrl('https://youtu.be/video?&si=share&&t=42'), 'https://youtu.be/video?t=42');
+});
+
+test('YouTube lookalikes, unsupported subdomains and non-HTTP URLs are untouched', () => {
+  for (const url of [
+    'https://notyoutube.com/watch?si=abc',
+    'https://youtube.com.evil.test/watch?si=abc',
+    'https://notyoutu.be/video?si=abc',
+    'https://api.youtube.com/watch?si=abc',
+    'https://youtube.com@evil.test/watch?si=abc',
+    'ftp://youtube.com/watch?si=abc',
+  ]) assert.equal(cleanUrl(url), url);
 });
 
 test('lookalike hosts are untouched', () => {
@@ -111,7 +137,7 @@ test('cleanText cleans multiple URLs and keeps trailing punctuation', () => {
   );
   assert.equal(
     cleanText('keep https://youtu.be/x?si=1 and https://x.com/a/status/1?s=46?'),
-    'keep https://youtu.be/x?si=1 and https://x.com/a/status/1?'
+    'keep https://youtu.be/x and https://x.com/a/status/1?'
   );
   assert.equal(
     cleanText('Check out this post\n\nhttps://x.com/a/status/1?s=46&t=abc'),

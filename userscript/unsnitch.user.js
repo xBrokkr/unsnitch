@@ -19,7 +19,7 @@
 
 // ===== BEGIN extension/core/clean.js (verbatim) =====
 /*
- * Unsnitch core — strips X (Twitter) share-tracking parameters from links.
+ * Unsnitch core — strips X (Twitter) and supported sites' share-tracking parameters from links.
  *
  * Works as a classic <script> (sets globalThis.UnsnitchCore) and via
  * require() in Node (module.exports). No dependencies, no network.
@@ -36,6 +36,12 @@
   // The only query params worth keeping (used by /search). Everything else —
   // s, t, a, ref_src, ref_url, cn, refsrc, utm_*, … — is tracking.
   var KEEP = { q: true, f: true, pf: true, lf: true };
+
+  // Other sites: remove only known trackers; preserve all other parameters.
+  var SITE_RULES = [
+    { host: /^(?:(?:www|m|music)\.youtube\.com|youtube\.com|youtu\.be)$/i,
+      strip: { si: true, pp: true, feature: true } },
+  ];
 
   // http(s) URLs inside free text; stops at whitespace, quotes and angle brackets.
   var URL_IN_TEXT_RE = /https?:\/\/[^\s<>"'`]+/gi;
@@ -56,7 +62,7 @@
   }
 
   /**
-   * Returns the URL without tracking params. Non-X URLs, non-http(s) URLs and
+   * Returns the URL without tracking params. Unsupported sites, non-http(s) URLs and
    * invalid input are returned unchanged. Host, path and #hash are preserved
    * byte-for-byte (we edit the original string rather than re-serialising).
    */
@@ -69,7 +75,9 @@
       return input;
     }
     if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return input;
-    if (!isXHost(parsed.hostname)) return input;
+    var isX = isXHost(parsed.hostname);
+    var rule = SITE_RULES.find(function (site) { return site.host.test(parsed.hostname); });
+    if (!isX && !rule) return input;
 
     // Split "base?query#hash" on the raw string. A '#' always ends the query,
     // and the first '?' before it always starts it.
@@ -80,13 +88,15 @@
     if (qIdx < 0) return input;
 
     var kept = beforeHash.slice(qIdx + 1).split('&').filter(function (pair) {
-      return pair !== '' && KEEP[decodeKey(pair.split('=')[0])] === true;
+      var key = decodeKey(pair.split('=')[0]);
+      if (pair === '') return false; // drop empty pairs from '?&a' or 'a&&b'
+      return isX ? KEEP[key] === true : rule.strip[key] !== true;
     });
 
     return beforeHash.slice(0, qIdx) + (kept.length ? '?' + kept.join('&') : '') + hash;
   }
 
-  /** Cleans every X URL found inside a larger string. */
+  /** Cleans every supported URL found inside a larger string. */
   function cleanText(text) {
     if (typeof text !== 'string' || text.indexOf('http') < 0) return text;
     return text.replace(URL_IN_TEXT_RE, function (match) {
