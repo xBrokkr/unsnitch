@@ -37,7 +37,7 @@ Both links open the same post. The first one also carries a token tied to the sh
 
 | Param | Example | What it is |
 | --- | --- | --- |
-| `s` | `?s=19`, `?s=20`, `?s=46` | A code for the app or platform you shared from. Common reports say 19 is Android, 20 is iPhone and 46 is desktop web, but people report other numbers too and X doesn't document it. |
+| `s` | `?s=19`, `?s=20`, `?s=46` | A code for the app or platform you shared from. Commonly seen: 19 is the Android app, 20 is the web and 46 is the iPhone app (older iPhone versions used 21). Other numbers show up for other apps and share targets, and X doesn't document any of them. |
 | `t` | `&t=Xy3k…` | A share token, widely reported to be tied to the account that shared the link. |
 | `a` | `?a=Kq3vX9mPzR2tLw8nYb4c` | A newer share token, also reported to be tied to the sharer. |
 | `ref_src`, `ref_url`, `cn`, `refsrc`, `utm_*` | `?ref_src=twsrc%5Etfw` | Referral and campaign tags from embeds and emails. |

@@ -6,7 +6,7 @@ When you copy or share a post, X appends query parameters to the URL:
 
 | Param | Example | What it reveals |
 |---|---|---|
-| `s` | `s=19` (Android), `s=20` (iPhone/iPad), `s=46` (desktop web) | Which kind of client the link was shared from. |
+| `s` | `s=19` (Android app), `s=20` (web), `s=46` (iPhone app; older versions used `s=21`) | Which kind of client the link was shared from. |
 | `t` | `t=<token>` | A per-share token. It lets X tie a click on the link to the share event, and so to the account that created it. |
 | `a` | `a=<token>` | A newer token with the same purpose. It identifies who shared the link and when. |
 | `ref_src`, `ref_url`, `refsrc` | `ref_src=twsrc%5Etfw` | Where the link was embedded or came from. |
