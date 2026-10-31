@@ -5,9 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-31
+
 ### Added
 - Remove YouTube share trackers (`si`, `pp`, `feature`) on the supported YouTube hosts while preserving timestamps, playlists and other parameters. No new permissions or content-script matches. Thanks @ungaaaabungaaa (#8).
 - Remove Spotify share ids (`si`, `pi`, `dlsi`) from `open.spotify.com` links; `context`, `nd` and every other parameter stay. No new permissions or content-script matches (#3).
+
+### Fixed
+- The userscript's `@version` now follows each release, so Tampermonkey and Violentmonkey pick up updates automatically (#10).
 
 ## [1.0.0] - 2026-10-29
 
@@ -24,5 +29,6 @@ First public release.
 - Tests with `node:test` (`npm test`) and a build script with no dependencies (`npm run build` → `dist/unsnitch-chrome.zip`, `dist/unsnitch-firefox.zip`).
 - Userscript, bookmarklet, iOS Shortcut guide, and a web cleaner you can install as an Android app (PWA).
 
-[Unreleased]: https://github.com/xBrokkr/unsnitch/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/xBrokkr/unsnitch/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/xBrokkr/unsnitch/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/xBrokkr/unsnitch/releases/tag/v1.0.0
