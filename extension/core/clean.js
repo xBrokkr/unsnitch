@@ -21,6 +21,8 @@
   var SITE_RULES = [
     { host: /^(?:(?:www|m|music)\.youtube\.com|youtube\.com|youtu\.be)$/i,
       strip: { si: true, pp: true, feature: true } },
+    { host: /^open\.spotify\.com$/i,
+      strip: { si: true, pi: true, dlsi: true } },
   ];
 
   // http(s) URLs inside free text; stops at whitespace, quotes and angle brackets.

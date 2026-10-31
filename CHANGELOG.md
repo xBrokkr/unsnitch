@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 - Remove YouTube share trackers (`si`, `pp`, `feature`) on the supported YouTube hosts while preserving timestamps, playlists and other parameters. No new permissions or content-script matches. Thanks @ungaaaabungaaa (#8).
+- Remove Spotify share ids (`si`, `pi`, `dlsi`) from `open.spotify.com` links; `context`, `nd` and every other parameter stay. No new permissions or content-script matches (#3).
 
 ## [1.0.0] - 2026-10-29
 

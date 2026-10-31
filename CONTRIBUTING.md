@@ -58,7 +58,7 @@ Spotted a new parameter in the wild? Open a [new tracking parameter](https://git
 
 ## Good first issues
 
-- **More sites:** Instagram `igsh`, Spotify `si`, TikTok `_t` / `_r` / `is_from_webapp`. Add one entry to `SITE_RULES` in `clean.js` (a denylist: strip only the listed params), test it, and keep the "unrelated URLs are untouched" tests green. No new permissions or content-script matches. YouTube (#2) is a worked example.
+- **More sites:** Instagram `igsh`, TikTok `_t` / `_r` / `is_from_webapp`. Add one entry to `SITE_RULES` in `clean.js` (a denylist: strip only the listed params), test it, and keep the "unrelated URLs are untouched" tests green. No new permissions or content-script matches. YouTube (#2) is a worked example.
 - **Safari port** with `xcrun safari-web-extension-converter`.
 - **Localization** with `_locales/` for the extension name, description and popup strings.
 - **Docs and translations** of the README.
