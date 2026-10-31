@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Unsnitch — strip X (Twitter) tracking from links
 // @namespace    https://github.com/xBrokkr/unsnitch
-// @version      1.0.0
+// @version      1.1.0
 // @description  Stop X from snitching on your links: removes ?s=, t=, a= and other share-tracking params from copied/shared links and the address bar. No network requests.
 // @author       Meriç Kalkan
 // @license      MIT
