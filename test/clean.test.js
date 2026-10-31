@@ -88,6 +88,31 @@ test('YouTube lookalikes, unsupported subdomains and non-HTTP URLs are untouched
   ]) assert.equal(cleanUrl(url), url);
 });
 
+test('Spotify rules remove only share ids and keep everything else', () => {
+  assert.equal(cleanUrl('https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=1a2b3c4d5e6f4a7b'),
+    'https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT');
+  assert.equal(cleanUrl('https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M?si=abc123&pi=u-xyz'),
+    'https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M');
+  assert.equal(
+    cleanUrl('https://open.spotify.com/track/1?si=a&context=spotify%3Aalbum%3A2&dlsi=b&nd=1#x'),
+    'https://open.spotify.com/track/1?context=spotify%3Aalbum%3A2&nd=1#x'
+  );
+  assert.equal(cleanUrl('https://open.spotify.com/intl-tr/album/2'), 'https://open.spotify.com/intl-tr/album/2');
+  assert.equal(cleanUrl('HTTPS://OPEN.Spotify.COM/track/1?%73i=a&SI=keep'), 'HTTPS://OPEN.Spotify.COM/track/1?SI=keep');
+  assert.equal(cleanText('Listen: https://open.spotify.com/track/1?si=abc!'), 'Listen: https://open.spotify.com/track/1!');
+});
+
+test('Spotify lookalikes and other Spotify hosts are untouched', () => {
+  for (const url of [
+    'https://notopen.spotify.com/track/1?si=abc',
+    'https://open.spotify.com.evil.test/track/1?si=abc',
+    'https://spotify.com/track/1?si=abc',
+    'https://www.spotify.com/track/1?si=abc',
+    'https://open.spotify.com@evil.test/track/1?si=abc',
+    'ftp://open.spotify.com/track/1?si=abc',
+  ]) assert.equal(cleanUrl(url), url);
+});
+
 test('lookalike hosts are untouched', () => {
   const urls = [
     'https://x.com.evil.com/a/status/1?s=20',
