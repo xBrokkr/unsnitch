@@ -71,4 +71,14 @@ Spotted a new parameter in the wild? Open a [new tracking parameter](https://git
 3. For anything that touches copy or share behavior, say which browsers you tested by hand.
 4. Add a line to `CHANGELOG.md` under **Unreleased**.
 
+Don't bump version numbers in a PR; that happens at release time.
+
+## Releasing (maintainers)
+
+1. Move the **Unreleased** entries in `CHANGELOG.md` under a new version heading and commit.
+2. `npm version minor` (or `patch`/`major`). This bumps `package.json`, syncs `extension/manifest.json` and the userscript's `@version` via `scripts/sync-version.mjs`, and creates the commit and `vX.Y.Z` tag.
+3. `git push --follow-tags`. The release workflow builds the zips and publishes the GitHub release; userscript managers pick up the new `@version` from `main`.
+
+`test/version.test.js` fails if the three versions ever drift apart.
+
 By contributing, you agree that your work is released under the [MIT License](LICENSE) and that you'll follow the [Code of Conduct](CODE_OF_CONDUCT.md).
