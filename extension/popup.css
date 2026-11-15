@@ -92,6 +92,7 @@ textarea:focus { outline: none; border-color: rgba(17, 17, 17, .3); background: 
 button {
   padding: 9px 16px; border: 0; border-radius: 999px; cursor: pointer;
   background: var(--ink); color: #fff; font: inherit; font-weight: 500;
+  flex: none; white-space: nowrap; /* longer translations wrap the feedback text, not the button */
 }
 button:hover { background: #2a2a2a; }
 button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
