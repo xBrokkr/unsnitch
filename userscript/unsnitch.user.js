@@ -43,6 +43,8 @@
       strip: { si: true, pp: true, feature: true } },
     { host: /^open\.spotify\.com$/i,
       strip: { si: true, pi: true, dlsi: true } },
+    { host: /^(?:www\.)?instagram\.com$/i,
+      strip: { igsh: true, igshid: true } },
   ];
 
   // http(s) URLs inside free text; stops at whitespace, quotes and angle brackets.

@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+- Remove Instagram share ids (`igsh`, `igshid`) from `instagram.com` and `www.instagram.com` links; `img_index` and every other parameter stay. No new permissions or content-script matches (#1).
+
 ## [1.1.0] - 2026-10-31
 
 ### Added
