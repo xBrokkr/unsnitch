@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+- Remove TikTok share and device params (`_t`, `_r`, `is_from_webapp`, `sender_device`, `is_copy_url`, `web_id`) from `tiktok.com`, `www.tiktok.com` and `m.tiktok.com` links; every other parameter stays. Short links such as `vm.tiktok.com` are left as they are, since resolving them would need a network request. No new permissions or content-script matches (#4).
+
 ## [1.1.0] - 2026-10-31
 
 ### Added

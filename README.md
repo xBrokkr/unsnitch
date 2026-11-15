@@ -48,6 +48,7 @@ Unsnitch removes **every** query parameter on X links **except** `q`, `f`, `pf` 
 
 | Site | Removed | Kept (examples) |
 | --- | --- | --- |
+| TikTok (`tiktok.com`, `www.`, `m.`) | `_t`, `_r`, `is_from_webapp`, `sender_device`, `is_copy_url`, `web_id` | everything else (short `vm.tiktok.com` links are left as they are) |
 | YouTube (`youtube.com`, `www.`, `m.`, `music.`, `youtu.be`) | `si`, `pp`, `feature` | `v`, `list`, `index`, `t` (timestamp) |
 | Spotify (`open.spotify.com`) | `si`, `pi`, `dlsi` | `context`, `nd` |
 
@@ -161,7 +162,7 @@ Only so the right-click **Copy clean link** item and the popup's **Clean & copy*
 <details>
 <summary><b>Will it touch YouTube, Instagram or other links?</b></summary>
 
-YouTube links lose their share id (`si`, `pp`, `feature`) and keep everything else, including the `t` timestamp. Spotify links lose `si`, `pi` and `dlsi`. Every other site is left alone on purpose. Support for more sites (Instagram `igsh`, TikTok `_t`, …) is a great [first contribution](CONTRIBUTING.md#good-first-issues).
+YouTube links lose their share id (`si`, `pp`, `feature`) and keep everything else, including the `t` timestamp. Spotify links lose `si`, `pi` and `dlsi`. TikTok links lose `_t`, `_r`, `is_from_webapp` and a few device params. Every other site is left alone on purpose. Support for more sites (Instagram `igsh`, …) is a great [first contribution](CONTRIBUTING.md#good-first-issues).
 </details>
 
 <details>

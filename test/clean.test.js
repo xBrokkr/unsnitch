@@ -60,6 +60,51 @@ test('unrelated URLs are untouched', () => {
   for (const u of urls) assert.equal(cleanUrl(u), u);
 });
 
+test('TikTok rules remove only share and device params and keep everything else', () => {
+  for (const host of ['tiktok.com', 'www.tiktok.com', 'm.tiktok.com']) {
+    assert.equal(
+      cleanUrl(`https://${host}/@user/video/7300000000000000000?_t=8hXyZ&_r=1&is_from_webapp=1&sender_device=pc`),
+      `https://${host}/@user/video/7300000000000000000`
+    );
+    assert.equal(
+      cleanUrl(`https://${host}/@user/video/1?_t=a&_r=1&is_from_webapp=1&sender_device=pc&is_copy_url=1&web_id=7300`),
+      `https://${host}/@user/video/1`
+    );
+    // Everything else survives, in its original order, together with the #hash.
+    assert.equal(
+      cleanUrl(`https://${host}/@user/video/1?lang=en&_t=a&q=hi%20there&_r=1#c`),
+      `https://${host}/@user/video/1?lang=en&q=hi%20there#c`
+    );
+    // Links without params are returned as they are.
+    assert.equal(cleanUrl(`https://${host}/@user/video/1`), `https://${host}/@user/video/1`);
+    assert.equal(cleanUrl(`https://${host}/@user`), `https://${host}/@user`);
+  }
+  assert.equal(cleanUrl('HTTPS://WWW.TikTok.COM/@u/video/1?%5Ft=a&_R=keep&_t=b'), 'HTTPS://WWW.TikTok.COM/@u/video/1?_R=keep');
+  assert.equal(cleanText('Watch https://www.tiktok.com/@u/video/1?_t=abc&_r=1!'), 'Watch https://www.tiktok.com/@u/video/1!');
+});
+
+test('TikTok short links are left as they are (resolving them would need a network request)', () => {
+  for (const url of [
+    'https://vm.tiktok.com/ZMabc123/',
+    'https://vm.tiktok.com/ZMabc123/?_t=abc&_r=1',
+    'https://vt.tiktok.com/ZSabc123/',
+    'https://www.tiktok.com/t/ZTabc123/',
+  ]) assert.equal(cleanUrl(url), url);
+});
+
+test('TikTok lookalikes and other TikTok hosts are untouched', () => {
+  for (const url of [
+    'https://nottiktok.com/@u/video/1?_t=abc',
+    'https://tiktok.com.evil.test/@u/video/1?_t=abc',
+    'https://www.tiktok.com.evil.test/@u/video/1?_t=abc',
+    'https://evil.test/tiktok.com/@u/video/1?_t=abc',
+    'https://tiktok.com@evil.test/@u/video/1?_t=abc',
+    'https://business.tiktok.com/?_t=abc',
+    'https://vm.tiktok.com/ZMabc123/?is_from_webapp=1',
+    'ftp://tiktok.com/@u/video/1?_t=abc',
+  ]) assert.equal(cleanUrl(url), url);
+});
+
 test('YouTube rules remove only share trackers and keep timestamps and playlists', () => {
   for (const host of ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'music.youtube.com', 'youtu.be']) {
     assert.equal(
