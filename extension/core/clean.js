@@ -21,6 +21,8 @@
   var SITE_RULES = [
     { host: /^(?:(?:www|m|music)\.youtube\.com|youtube\.com|youtu\.be)$/i,
       strip: { si: true, pp: true, feature: true } },
+    { host: /^(?:(?:www\.)?luma\.com|lu\.ma)$/i,
+      strip: { tk: true } },
     { host: /^open\.spotify\.com$/i,
       strip: { si: true, pi: true, dlsi: true } },
   ];

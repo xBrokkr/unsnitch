@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+- Remove the Luma share code (`tk`) from `luma.com`, `www.luma.com` and `lu.ma` links; every other parameter stays. No new permissions or content-script matches (#11).
+
 ## [1.1.0] - 2026-10-31
 
 ### Added

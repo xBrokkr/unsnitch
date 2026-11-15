@@ -88,6 +88,37 @@ test('YouTube lookalikes, unsupported subdomains and non-HTTP URLs are untouched
   ]) assert.equal(cleanUrl(url), url);
 });
 
+test('Luma rules remove only the tk code and keep everything else', () => {
+  for (const host of ['luma.com', 'www.luma.com', 'lu.ma']) {
+    assert.equal(cleanUrl(`https://${host}/my-event?tk=AbC123`), `https://${host}/my-event`);
+    assert.equal(cleanUrl(`https://${host}/calendar/cal-abc?tk=AbC123`), `https://${host}/calendar/cal-abc`);
+    // Other parameters survive, in their original order, together with the #hash.
+    assert.equal(
+      cleanUrl(`https://${host}/my-event?coupon=EARLY&tk=AbC123&x=a%2Bb#details`),
+      `https://${host}/my-event?coupon=EARLY&x=a%2Bb#details`
+    );
+    // Links without params are returned as they are.
+    assert.equal(cleanUrl(`https://${host}/my-event`), `https://${host}/my-event`);
+    assert.equal(cleanUrl(`https://${host}/`), `https://${host}/`);
+  }
+  assert.equal(cleanUrl('HTTPS://LU.MA/my-event?%74k=a&TK=keep&tk=b'), 'HTTPS://LU.MA/my-event?TK=keep');
+  assert.equal(cleanText('RSVP: https://luma.com/my-event?tk=AbC123.'), 'RSVP: https://luma.com/my-event.');
+});
+
+test('Luma lookalikes, unsupported subdomains and non-HTTP URLs are untouched', () => {
+  for (const url of [
+    'https://notluma.com/my-event?tk=abc',
+    'https://notlu.ma/my-event?tk=abc',
+    'https://lu.ma.evil.com/my-event?tk=abc',
+    'https://luma.com.evil.test/my-event?tk=abc',
+    'https://evil.test/luma.com/my-event?tk=abc',
+    'https://luma.com@evil.test/my-event?tk=abc',
+    'https://api.luma.com/my-event?tk=abc',
+    'https://api.lu.ma/my-event?tk=abc',
+    'ftp://luma.com/my-event?tk=abc',
+  ]) assert.equal(cleanUrl(url), url);
+});
+
 test('Spotify rules remove only share ids and keep everything else', () => {
   assert.equal(cleanUrl('https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=1a2b3c4d5e6f4a7b'),
     'https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT');
