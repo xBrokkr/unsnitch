@@ -35,6 +35,7 @@ npm run build     # dist/unsnitch-chrome.zip + dist/unsnitch-firefox.zip (needs 
 | `extension/isolated.js` | Bridges to extension storage (on/off, counter) and handles context-menu copies |
 | `extension/background.js` | Right-click **Copy clean link** |
 | `extension/popup.*` | Toolbar popup |
+| `extension/_locales/` | Translations: one `messages.json` per language (English and Turkish so far) |
 | `test/` | `node:test` unit tests |
 | `scripts/build.mjs` | Builds the per-browser zips |
 | `userscript/`, `site/`, `docs/` | Userscript, landing page and web cleaner, guides |
@@ -56,11 +57,22 @@ If X adds a parameter that is **needed** for a page to work, add it to the `KEEP
 
 Spotted a new parameter in the wild? Open a [new tracking parameter](https://github.com/xBrokkr/unsnitch/issues/new?template=new-tracker-param.yml) issue, even if you don't send a PR.
 
+## Adding a translation
+
+The extension name and description, the popup text and the **Copy clean link** menu title live in `extension/_locales/<code>/messages.json`. English (`en`) is the default; Turkish is `tr`.
+
+1. Copy `extension/_locales/en/messages.json` to `extension/_locales/<code>/messages.json`. Use a [supported language code](https://developer.chrome.com/docs/extensions/reference/api/i18n) such as `de` or `pt_BR`.
+2. Translate the `message` values. Keep the keys, and set `htmlLang` to your language code (`pt-BR` for the `pt_BR` folder).
+3. `npm test` checks that every key exists in every language, and that the name is at most 75 and the description at most 132 characters (the store limits).
+4. Try it by loading `extension/` unpacked in a browser that is set to that language.
+
+New text goes into `messages.json` (in every language folder) and is used through a `data-i18n` attribute in `popup.html` or `chrome.i18n.getMessage` in code, never hardcoded.
+
 ## Good first issues
 
-- **More sites:** Instagram `igsh`, TikTok `_t` / `_r` / `is_from_webapp`. Add one entry to `SITE_RULES` in `clean.js` (a denylist: strip only the listed params), test it, and keep the "unrelated URLs are untouched" tests green. No new permissions or content-script matches. YouTube (#2) is a worked example.
+- **More sites:** pick a site whose share links carry trackers (see the open issues). Add one entry to `SITE_RULES` in `clean.js` (a denylist: strip only the listed params), test it, and keep the "unrelated URLs are untouched" tests green. No new permissions or content-script matches. YouTube (#2) is a worked example.
 - **Safari port** with `xcrun safari-web-extension-converter`.
-- **Localization** with `_locales/` for the extension name, description and popup strings.
+- **More languages:** English and Turkish are done. See [Adding a translation](#adding-a-translation).
 - **Docs and translations** of the README.
 - **More tests** for edge cases: weird encodings, IDN hosts, very long URLs.
 

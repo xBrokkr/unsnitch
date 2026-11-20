@@ -48,9 +48,11 @@ Unsnitch removes **every** query parameter on X links **except** `q`, `f`, `pf` 
 
 | Site | Removed | Kept (examples) |
 | --- | --- | --- |
+| TikTok (`tiktok.com`, `www.`, `m.`) | `_t`, `_r`, `is_from_webapp`, `sender_device`, `is_copy_url`, `web_id` | everything else (short `vm.tiktok.com` links are left as they are) |
 | YouTube (`youtube.com`, `www.`, `m.`, `music.`, `youtu.be`) | `si`, `pp`, `feature` | `v`, `list`, `index`, `t` (timestamp) |
 | Luma (`luma.com`, `www.luma.com`, `lu.ma`) | `tk` | everything else |
 | Spotify (`open.spotify.com`) | `si`, `pi`, `dlsi` | `context`, `nd` |
+| Instagram (`instagram.com`, `www.`) | `igsh`, `igshid` | `img_index` |
 
 Links to any other site are never modified. The extension still only runs on X pages: a YouTube or Spotify link is cleaned when you copy it from a post on X, in the popup's **Paste & clean** box or in the web cleaner.
 
@@ -162,7 +164,7 @@ Only so the right-click **Copy clean link** item and the popup's **Clean & copy*
 <details>
 <summary><b>Will it touch YouTube, Instagram or other links?</b></summary>
 
-YouTube links lose their share id (`si`, `pp`, `feature`) and keep everything else, including the `t` timestamp. Spotify links lose `si`, `pi` and `dlsi`. Luma links lose `tk`. Every other site is left alone on purpose. Support for more sites (Instagram `igsh`, TikTok `_t`, …) is a great [first contribution](CONTRIBUTING.md#good-first-issues).
+YouTube links lose their share id (`si`, `pp`, `feature`) and keep everything else, including the `t` timestamp. Spotify links lose `si`, `pi` and `dlsi`. Instagram links lose `igsh` and `igshid`. TikTok links lose `_t`, `_r`, `is_from_webapp` and a few device params. Luma links lose `tk`. Every other site is left alone on purpose. Support for more sites is a great [first contribution](CONTRIBUTING.md#good-first-issues).
 </details>
 
 <details>

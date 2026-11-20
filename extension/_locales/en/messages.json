@@ -1,0 +1,86 @@
+{
+  "extName": {
+    "message": "Unsnitch — clean X links",
+    "description": "Extension name, shown in the browser's extension list and store. 75 characters at most."
+  },
+  "extShortName": {
+    "message": "Unsnitch",
+    "description": "Short extension name. Keep the brand name."
+  },
+  "extDescription": {
+    "message": "Stop X from snitching on your links. Strips share-tracking params (?s=, t=, a=) from X (Twitter) links you copy or share.",
+    "description": "Extension description, shown in the browser's extension list and store. 132 characters at most."
+  },
+  "htmlLang": {
+    "message": "en",
+    "description": "Language code of this translation (BCP 47, for example en or tr). Used as the popup's lang attribute."
+  },
+  "tagline": {
+    "message": "Stop X from snitching on your links.",
+    "description": "Popup tagline under the logo."
+  },
+  "toggleTitle": {
+    "message": "Turn Unsnitch on/off",
+    "description": "Tooltip of the on/off switch in the popup."
+  },
+  "enabledLabel": {
+    "message": "Enabled",
+    "description": "Screen-reader label of the on/off switch in the popup."
+  },
+  "countLabelOne": {
+    "message": "link unsnitched",
+    "description": "Shown next to the counter when exactly one link has been cleaned (1 link unsnitched)."
+  },
+  "countLabelMany": {
+    "message": "links unsnitched",
+    "description": "Shown next to the counter for any other number of cleaned links (0 or 25 links unsnitched). Use the same text as the singular if your language doesn't need a plural."
+  },
+  "statusOn": {
+    "message": "Protecting your links on X",
+    "description": "Popup status while Unsnitch is on."
+  },
+  "statusOff": {
+    "message": "Paused — links are not cleaned",
+    "description": "Popup status while Unsnitch is switched off."
+  },
+  "pasteLabel": {
+    "message": "Paste & clean",
+    "description": "Label of the text box where you paste links to clean."
+  },
+  "cleanButton": {
+    "message": "Clean & copy",
+    "description": "Button that cleans the pasted text and copies the result."
+  },
+  "feedbackEmpty": {
+    "message": "Paste a link first.",
+    "description": "Feedback when the text box is empty and the button is pressed."
+  },
+  "feedbackCleanedCopied": {
+    "message": "Cleaned & copied!",
+    "description": "Feedback after the pasted links were cleaned and the result was copied."
+  },
+  "feedbackAlreadyCleanCopied": {
+    "message": "Already clean — copied.",
+    "description": "Feedback when nothing needed cleaning, and the text was copied."
+  },
+  "feedbackCleanedManual": {
+    "message": "Cleaned! Copy it manually.",
+    "description": "Feedback when the links were cleaned but the browser did not allow copying."
+  },
+  "feedbackAlreadyClean": {
+    "message": "Already clean.",
+    "description": "Feedback when nothing needed cleaning and the browser did not allow copying."
+  },
+  "starOnGithub": {
+    "message": "★ Star on GitHub",
+    "description": "Footer link to the GitHub repository. Keep the star."
+  },
+  "coffee": {
+    "message": "☕ Coffee",
+    "description": "Footer link to the maintainer's Buy Me a Coffee page. Keep it short and keep the cup."
+  },
+  "copyCleanLink": {
+    "message": "Copy clean link",
+    "description": "Right-click menu item on links on X."
+  }
+}

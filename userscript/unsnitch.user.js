@@ -39,19 +39,23 @@
 
   // Other sites: remove only known trackers; preserve all other parameters.
   var SITE_RULES = [
+    { host: /^(?:www\.|m\.)?tiktok\.com$/i,
+      strip: { _t: true, _r: true, is_from_webapp: true, sender_device: true, is_copy_url: true, web_id: true } },
     { host: /^(?:(?:www|m|music)\.youtube\.com|youtube\.com|youtu\.be)$/i,
       strip: { si: true, pp: true, feature: true } },
     { host: /^(?:(?:www\.)?luma\.com|lu\.ma)$/i,
       strip: { tk: true } },
     { host: /^open\.spotify\.com$/i,
       strip: { si: true, pi: true, dlsi: true } },
+    { host: /^(?:www\.)?instagram\.com$/i,
+      strip: { igsh: true, igshid: true } },
   ];
 
   // http(s) URLs inside free text; stops at whitespace, quotes and angle brackets.
   var URL_IN_TEXT_RE = /https?:\/\/[^\s<>"'`]+/gi;
 
-  // Punctuation that usually ends a sentence rather than a URL.
-  var TRAILING_PUNCT_RE = /[.,;:!?)\]}]+$/;
+  // Punctuation that usually ends a sentence rather than a URL, including the ellipsis character (U+2026).
+  var TRAILING_PUNCT_RE = /[.,;:!?)\]}\u2026]+$/;
 
   function isXHost(host) {
     return typeof host === 'string' && X_HOST_RE.test(host);
