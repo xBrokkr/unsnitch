@@ -31,8 +31,8 @@
   // http(s) URLs inside free text; stops at whitespace, quotes and angle brackets.
   var URL_IN_TEXT_RE = /https?:\/\/[^\s<>"'`]+/gi;
 
-  // Punctuation that usually ends a sentence rather than a URL.
-  var TRAILING_PUNCT_RE = /[.,;:!?)\]}]+$/;
+  // Punctuation that usually ends a sentence rather than a URL, including the ellipsis character (U+2026).
+  var TRAILING_PUNCT_RE = /[.,;:!?)\]}\u2026]+$/;
 
   function isXHost(host) {
     return typeof host === 'string' && X_HOST_RE.test(host);
