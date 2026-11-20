@@ -17,7 +17,7 @@ function setupMenu() {
   chrome.contextMenus.removeAll(function () {
     chrome.contextMenus.create({
       id: MENU_ID,
-      title: 'Copy clean link',
+      title: chrome.i18n.getMessage('copyCleanLink'),
       contexts: ['link'],
       documentUrlPatterns: X_PATTERNS, // our content script only runs on X
       targetUrlPatterns: X_PATTERNS

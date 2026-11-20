@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Unsnitch — clean X links",
-  "short_name": "Unsnitch",
+  "name": "__MSG_extName__",
+  "short_name": "__MSG_extShortName__",
+  "default_locale": "en",
   "version": "1.1.0",
-  "description": "Stop X from snitching on your links. Strips share-tracking params (?s=, t=, a=) from X (Twitter) links you copy or share.",
+  "description": "__MSG_extDescription__",
   "homepage_url": "https://github.com/xBrokkr/unsnitch",
   "permissions": [
     "storage",

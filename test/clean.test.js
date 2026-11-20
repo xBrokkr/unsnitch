@@ -158,6 +158,34 @@ test('Spotify lookalikes and other Spotify hosts are untouched', () => {
   ]) assert.equal(cleanUrl(url), url);
 });
 
+test('Instagram rules remove only share ids and keep everything else', () => {
+  for (const host of ['instagram.com', 'www.instagram.com']) {
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/?igsh=MXZ2bHd4ZXo0dGRjbA==`), `https://${host}/p/ABC123/`);
+    assert.equal(cleanUrl(`https://${host}/reel/ABC123/?igshid=YmMyMTA2M2Y=`), `https://${host}/reel/ABC123/`);
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/?igsh=abc&igshid=def`), `https://${host}/p/ABC123/`);
+    // Carousel position and any other parameter survive, in their original order.
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/?img_index=2&igsh=abc`), `https://${host}/p/ABC123/?img_index=2`);
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/?igsh=abc&img_index=2&x=a%2Bb#c`), `https://${host}/p/ABC123/?img_index=2&x=a%2Bb#c`);
+    // Links without params are returned as they are.
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/`), `https://${host}/p/ABC123/`);
+    assert.equal(cleanUrl(`https://${host}/`), `https://${host}/`);
+  }
+  assert.equal(cleanUrl('HTTPS://WWW.Instagram.COM/p/ABC123/?%69gsh=a&IGSH=keep'), 'HTTPS://WWW.Instagram.COM/p/ABC123/?IGSH=keep');
+  assert.equal(cleanText('Look: https://www.instagram.com/p/ABC123/?igsh=MXZ2bHd4ZXo0dGRjbA==!'), 'Look: https://www.instagram.com/p/ABC123/!');
+});
+
+test('Instagram lookalikes and other Instagram hosts are untouched', () => {
+  for (const url of [
+    'https://notinstagram.com/p/ABC123/?igsh=abc',
+    'https://instagram.com.evil.test/p/ABC123/?igsh=abc',
+    'https://evil.test/instagram.com/p/ABC123/?igsh=abc',
+    'https://l.instagram.com/?u=https%3A%2F%2Fexample.com&igsh=abc',
+    'https://help.instagram.com/?igsh=abc',
+    'https://instagram.com@evil.test/p/ABC123/?igsh=abc',
+    'ftp://instagram.com/p/ABC123/?igsh=abc',
+  ]) assert.equal(cleanUrl(url), url);
+});
+
 test('lookalike hosts are untouched', () => {
   const urls = [
     'https://x.com.evil.com/a/status/1?s=20',
@@ -218,4 +246,101 @@ test('cleanText cleans multiple URLs and keeps trailing punctuation', () => {
     '<a href="https://x.com/a/status/1">x</a>'
   );
   assert.equal(cleanText('no links here'), 'no links here');
+});
+
+test('encoded keys are decoded before they are matched', () => {
+  // %73 is "s": removed. %71 is "q": kept on /search.
+  assert.equal(cleanUrl('https://x.com/a/status/1?%73=20'), 'https://x.com/a/status/1');
+  assert.equal(cleanUrl('https://x.com/search?%71=a'), 'https://x.com/search?%71=a');
+  assert.equal(cleanUrl('https://x.com/search?%71=a&%73=20'), 'https://x.com/search?%71=a');
+  // A malformed escape never throws. On X the key is just not on the allowlist, and on a denylist site it is kept.
+  assert.equal(cleanUrl('https://x.com/a/status/1?%zz=1&s=20'), 'https://x.com/a/status/1');
+  assert.equal(cleanUrl('https://youtu.be/video?%zz=1&si=abc'), 'https://youtu.be/video?%zz=1');
+});
+
+test('empty and odd query strings', () => {
+  const base = 'https://x.com/a/status/1';
+  for (const query of ['?', '?&&', '?=x', '?s', '?s=20&', '?&s=20', '?&&s=20&&', '?s=20&&t=1']) {
+    assert.equal(cleanUrl(base + query), base, query);
+  }
+  // On the allowlist side, a bare key and an empty value are both kept as written.
+  assert.equal(cleanUrl('https://x.com/search?q&s=20'), 'https://x.com/search?q');
+  assert.equal(cleanUrl('https://x.com/search?q=&s=20'), 'https://x.com/search?q=');
+});
+
+test('hash handling: the query ends at the first #, and the hash is never edited', () => {
+  assert.equal(cleanUrl('https://x.com/a/status/1?s=20#frag'), 'https://x.com/a/status/1#frag');
+  // A "?" that only appears inside the hash is not a query.
+  assert.equal(cleanUrl('https://x.com/a/status/1#a?s=20'), 'https://x.com/a/status/1#a?s=20');
+  assert.equal(cleanUrl('https://x.com/a/status/1?s=20#a?s=1'), 'https://x.com/a/status/1#a?s=1');
+  assert.equal(cleanUrl('https://x.com/a/status/1?s=20#'), 'https://x.com/a/status/1#');
+  assert.equal(cleanUrl('https://x.com/search?s=20&q=a#b&s=1'), 'https://x.com/search?q=a#b&s=1');
+});
+
+test('ports and credentials are preserved', () => {
+  assert.equal(cleanUrl('https://x.com:443/a/status/1?s=20'), 'https://x.com:443/a/status/1');
+  assert.equal(cleanUrl('http://x.com:80/a/status/1?s=20'), 'http://x.com:80/a/status/1');
+  assert.equal(cleanUrl('https://x.com:8443/a/status/1?s=20'), 'https://x.com:8443/a/status/1');
+  assert.equal(cleanUrl('https://user:pass@x.com/a/status/1?s=20'), 'https://user:pass@x.com/a/status/1');
+  assert.equal(cleanUrl('https://user@twitter.com:443/a/status/1?t=1'), 'https://user@twitter.com:443/a/status/1');
+  // The host is what follows the last "@", so an X name in the userinfo doesn't make a link X.
+  for (const url of [
+    'https://x.com@evil.test/a/status/1?s=20',
+    'https://x.com:443@evil.test/a/status/1?s=20',
+    'https://twitter.com:pass@evil.test/a/status/1?s=20',
+  ]) assert.equal(cleanUrl(url), url);
+});
+
+test('look-alike and IDN hosts are untouched', () => {
+  for (const url of [
+    'https://x.com.evil.test/a/status/1?s=20',
+    'https://notx.com/a/status/1?s=20',
+    'https://xn--u1a.com/a/status/1?s=20', // Cyrillic "\u0445" (U+0445) that looks like x.com
+    'https://\u0445.com/a/status/1?s=20', // the same host written as Unicode
+    'https://xn--twtter-qvf.com/a/status/1?t=1', // "tw\u0456tter.com" with a Cyrillic "\u0456"
+    'https://tw\u0456tter.com/a/status/1?t=1',
+  ]) assert.equal(cleanUrl(url), url);
+});
+
+test('very long URLs still clean and do not throw', () => {
+  // About 15k characters of query.
+  const noise = Array.from({ length: 2000 }, (_, i) => `k${i}=v`).join('&');
+  assert.ok(noise.length > 10000);
+  assert.equal(cleanUrl(`https://x.com/a/status/1?s=20&${noise}&t=abc`), 'https://x.com/a/status/1');
+  // A 10k-character value on a kept key survives byte for byte.
+  const long = 'a'.repeat(10000);
+  assert.equal(cleanUrl(`https://x.com/search?q=${long}&s=20`), `https://x.com/search?q=${long}`);
+  assert.equal(cleanUrl(`https://youtu.be/video?t=${long}&si=abc`), `https://youtu.be/video?t=${long}`);
+  // Many repeats of the same tracker.
+  assert.equal(cleanUrl(`https://x.com/a/status/1?${'s=20&'.repeat(2000)}`), 'https://x.com/a/status/1');
+  // And inside a long text.
+  assert.equal(
+    cleanText(`${'word '.repeat(5000)}https://x.com/a/status/1?s=20 end`),
+    `${'word '.repeat(5000)}https://x.com/a/status/1 end`
+  );
+});
+
+test('cleanText: wrappers, trailing punctuation and repeated links', () => {
+  const clean = 'https://x.com/a/status/1';
+  const dirty = `${clean}?s=20&t=abc`;
+  assert.equal(cleanText(`a ${dirty} b https://twitter.com/b/status/2?s=19 c`), `a ${clean} b https://twitter.com/b/status/2 c`);
+  assert.equal(cleanText(`(${dirty})`), `(${clean})`);
+  assert.equal(cleanText(`<${dirty}>`), `<${clean}>`);
+  assert.equal(cleanText(`[post](${dirty})`), `[post](${clean})`);
+  assert.equal(cleanText(`"${dirty}"`), `"${clean}"`);
+  assert.equal(cleanText(`see ${dirty}.`), `see ${clean}.`);
+  assert.equal(cleanText(`see ${dirty}...`), `see ${clean}...`);
+  // The same link twice, and one link per line.
+  assert.equal(cleanText(`${dirty} ${dirty}`), `${clean} ${clean}`);
+  assert.equal(cleanText(`${dirty}\n${dirty}`), `${clean}\n${clean}`);
+  // Links that are already clean are returned as they are.
+  assert.equal(cleanText(`${clean} and ${clean}.`), `${clean} and ${clean}.`);
+});
+
+test('cleanText keeps a trailing ellipsis (\u2026) after a link', () => {
+  const clean = 'https://x.com/a/status/1';
+  assert.equal(cleanText(`see ${clean}?s=20\u2026`), `see ${clean}\u2026`);
+  assert.equal(cleanText(`see ${clean}?s=20\u2026 more`), `see ${clean}\u2026 more`);
+  assert.equal(cleanText(`(see ${clean}?s=20\u2026)`), `(see ${clean}\u2026)`);
+  assert.equal(cleanText('see https://x.com/search?q=a&s=20\u2026'), 'see https://x.com/search?q=a\u2026');
 });

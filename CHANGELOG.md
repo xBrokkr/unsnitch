@@ -6,7 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [Unreleased]
 
 ### Added
+- Remove Instagram share ids (`igsh`, `igshid`) from `instagram.com` and `www.instagram.com` links; `img_index` and every other parameter stay. No new permissions or content-script matches (#1).
 - Remove TikTok share and device params (`_t`, `_r`, `is_from_webapp`, `sender_device`, `is_copy_url`, `web_id`) from `tiktok.com`, `www.tiktok.com` and `m.tiktok.com` links; every other parameter stays. Short links such as `vm.tiktok.com` are left as they are, since resolving them would need a network request. No new permissions or content-script matches (#4).
+- Localization: the extension name and description, the popup text and the **Copy clean link** menu title now come from `extension/_locales/`, in English and Turkish. The extension shows Turkish when the browser language is Turkish and English otherwise, and a new language is one `messages.json`. No new permissions. The popup's **Clean & copy** button no longer wraps when a translation is longer (#6).
+
+### Fixed
+- `cleanText` no longer deletes a trailing ellipsis (`…`) after a link: `https://x.com/a/status/1?s=20…` used to lose the `…` together with the tracker. Found while adding edge-case tests for encoded keys, odd query strings, hashes, ports and credentials, look-alike and IDN hosts, very long URLs and `cleanText` wrappers (#7).
 
 ## [1.1.0] - 2026-10-31
 

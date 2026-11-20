@@ -8,16 +8,33 @@
 var core = globalThis.UnsnitchCore;
 var $ = function (id) { return document.getElementById(id); };
 
+// All text comes from _locales/<lang>/messages.json. The English text in popup.html is only a fallback.
+function t(key) { return chrome.i18n.getMessage(key) || key; }
+
+function localize() {
+  var lang = chrome.i18n.getMessage('htmlLang');
+  if (lang) document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var text = chrome.i18n.getMessage(el.dataset.i18n);
+    if (text) el.textContent = text;
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+    var text = chrome.i18n.getMessage(el.dataset.i18nTitle);
+    if (text) el.title = text;
+  });
+}
+localize();
+
 function renderEnabled(on) {
   $('enabled').checked = on;
   document.body.classList.toggle('off', !on);
-  $('status').textContent = on ? 'Protecting your links on X' : 'Paused — links are not cleaned';
+  $('status').textContent = on ? t('statusOn') : t('statusOff');
 }
 
 function renderCount(n) {
   n = Number(n) || 0;
   $('count').textContent = n.toLocaleString();
-  $('count-label').textContent = n === 1 ? 'link unsnitched' : 'links unsnitched';
+  $('count-label').textContent = n === 1 ? t('countLabelOne') : t('countLabelMany');
 }
 
 chrome.storage.sync.get({ enabled: true }, function (res) { renderEnabled(res.enabled !== false); });
@@ -39,14 +56,14 @@ $('clean').addEventListener('click', function () {
   var after = core.cleanText(before);
   input.value = after;
   if (!after.trim()) {
-    $('feedback').textContent = 'Paste a link first.';
+    $('feedback').textContent = t('feedbackEmpty');
     return;
   }
   navigator.clipboard.writeText(after).then(function () {
-    $('feedback').textContent = after === before ? 'Already clean — copied.' : 'Cleaned & copied!';
+    $('feedback').textContent = after === before ? t('feedbackAlreadyCleanCopied') : t('feedbackCleanedCopied');
   }, function () {
     input.select();
-    $('feedback').textContent = after === before ? 'Already clean.' : 'Cleaned! Copy it manually.';
+    $('feedback').textContent = after === before ? t('feedbackAlreadyClean') : t('feedbackCleanedManual');
   });
   if (after !== before) {
     chrome.storage.local.get({ cleanedCount: 0 }, function (res) {

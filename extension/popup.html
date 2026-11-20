@@ -11,28 +11,28 @@
     <div class="pill">
       <img src="icons/icon-32.png" alt="" width="24" height="24">
       <h1>unsnitch</h1>
-      <label class="switch" title="Turn Unsnitch on/off">
+      <label class="switch" title="Turn Unsnitch on/off" data-i18n-title="toggleTitle">
         <input type="checkbox" id="enabled" checked>
         <span class="slider" aria-hidden="true"></span>
-        <span class="sr-only">Enabled</span>
+        <span class="sr-only" data-i18n="enabledLabel">Enabled</span>
       </label>
     </div>
   </header>
 
   <main>
-    <p class="tagline">Stop X from snitching on your links.</p>
+    <p class="tagline" data-i18n="tagline">Stop X from snitching on your links.</p>
 
     <section class="counter">
       <span id="count">0</span>
-      <span id="count-label">links unsnitched</span>
-      <span id="status" class="status">Protecting your links on X</span>
+      <span id="count-label" data-i18n="countLabelMany">links unsnitched</span>
+      <span id="status" class="status" data-i18n="statusOn">Protecting your links on X</span>
     </section>
 
     <section class="paste">
-      <label for="input">Paste &amp; clean</label>
+      <label for="input" data-i18n="pasteLabel">Paste &amp; clean</label>
       <textarea id="input" rows="3" spellcheck="false" placeholder="https://x.com/user/status/123?s=20&amp;t=…"></textarea>
       <div class="row">
-        <button id="clean" type="button">Clean &amp; copy</button>
+        <button id="clean" type="button" data-i18n="cleanButton">Clean &amp; copy</button>
         <span id="feedback" role="status"></span>
       </div>
     </section>
@@ -40,8 +40,8 @@
 
   <footer>
     <a href="https://github.com/xBrokkr/unsnitch" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <a class="star" href="https://github.com/xBrokkr/unsnitch" target="_blank" rel="noopener noreferrer">★ Star on GitHub</a>
-    <a href="https://buymeacoffee.com/merickalkaf" target="_blank" rel="noopener noreferrer">☕ Coffee</a>
+    <a class="star" href="https://github.com/xBrokkr/unsnitch" target="_blank" rel="noopener noreferrer" data-i18n="starOnGithub">★ Star on GitHub</a>
+    <a href="https://buymeacoffee.com/merickalkaf" target="_blank" rel="noopener noreferrer" data-i18n="coffee">☕ Coffee</a>
   </footer>
 
   <script src="core/clean.js"></script>

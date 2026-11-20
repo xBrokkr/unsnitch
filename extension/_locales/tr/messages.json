@@ -1,0 +1,86 @@
+{
+  "extName": {
+    "message": "Unsnitch — X linklerini temizle",
+    "description": "Extension name, shown in the browser's extension list and store. 75 characters at most."
+  },
+  "extShortName": {
+    "message": "Unsnitch",
+    "description": "Short extension name. Keep the brand name."
+  },
+  "extDescription": {
+    "message": "X'in linklerini ispiyonlamasına son ver. Kopyaladığın veya paylaştığın X (Twitter) linklerindeki takibi (?s=, t=, a=) siler.",
+    "description": "Extension description, shown in the browser's extension list and store. 132 characters at most."
+  },
+  "htmlLang": {
+    "message": "tr",
+    "description": "Language code of this translation (BCP 47, for example en or tr). Used as the popup's lang attribute."
+  },
+  "tagline": {
+    "message": "X'in linklerini ispiyonlamasına son ver.",
+    "description": "Popup tagline under the logo."
+  },
+  "toggleTitle": {
+    "message": "Unsnitch'i aç/kapat",
+    "description": "Tooltip of the on/off switch in the popup."
+  },
+  "enabledLabel": {
+    "message": "Etkin",
+    "description": "Screen-reader label of the on/off switch in the popup."
+  },
+  "countLabelOne": {
+    "message": "temizlenen link",
+    "description": "Shown next to the counter when exactly one link has been cleaned (1 link unsnitched)."
+  },
+  "countLabelMany": {
+    "message": "temizlenen link",
+    "description": "Shown next to the counter for any other number of cleaned links (0 or 25 links unsnitched). Use the same text as the singular if your language doesn't need a plural."
+  },
+  "statusOn": {
+    "message": "X'teki linklerin korunuyor",
+    "description": "Popup status while Unsnitch is on."
+  },
+  "statusOff": {
+    "message": "Duraklatıldı — linkler temizlenmiyor",
+    "description": "Popup status while Unsnitch is switched off."
+  },
+  "pasteLabel": {
+    "message": "Yapıştır ve temizle",
+    "description": "Label of the text box where you paste links to clean."
+  },
+  "cleanButton": {
+    "message": "Temizle ve kopyala",
+    "description": "Button that cleans the pasted text and copies the result."
+  },
+  "feedbackEmpty": {
+    "message": "Önce bir link yapıştır.",
+    "description": "Feedback when the text box is empty and the button is pressed."
+  },
+  "feedbackCleanedCopied": {
+    "message": "Temizlendi ve kopyalandı!",
+    "description": "Feedback after the pasted links were cleaned and the result was copied."
+  },
+  "feedbackAlreadyCleanCopied": {
+    "message": "Zaten temiz — kopyalandı.",
+    "description": "Feedback when nothing needed cleaning, and the text was copied."
+  },
+  "feedbackCleanedManual": {
+    "message": "Temizlendi! Elle kopyala.",
+    "description": "Feedback when the links were cleaned but the browser did not allow copying."
+  },
+  "feedbackAlreadyClean": {
+    "message": "Zaten temiz.",
+    "description": "Feedback when nothing needed cleaning and the browser did not allow copying."
+  },
+  "starOnGithub": {
+    "message": "★ GitHub'da yıldızla",
+    "description": "Footer link to the GitHub repository. Keep the star."
+  },
+  "coffee": {
+    "message": "☕ Kahve",
+    "description": "Footer link to the maintainer's Buy Me a Coffee page. Keep it short and keep the cup."
+  },
+  "copyCleanLink": {
+    "message": "Temiz linki kopyala",
+    "description": "Right-click menu item on links on X."
+  }
+}
