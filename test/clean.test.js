@@ -113,6 +113,34 @@ test('Spotify lookalikes and other Spotify hosts are untouched', () => {
   ]) assert.equal(cleanUrl(url), url);
 });
 
+test('Instagram rules remove only share ids and keep everything else', () => {
+  for (const host of ['instagram.com', 'www.instagram.com']) {
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/?igsh=MXZ2bHd4ZXo0dGRjbA==`), `https://${host}/p/ABC123/`);
+    assert.equal(cleanUrl(`https://${host}/reel/ABC123/?igshid=YmMyMTA2M2Y=`), `https://${host}/reel/ABC123/`);
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/?igsh=abc&igshid=def`), `https://${host}/p/ABC123/`);
+    // Carousel position and any other parameter survive, in their original order.
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/?img_index=2&igsh=abc`), `https://${host}/p/ABC123/?img_index=2`);
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/?igsh=abc&img_index=2&x=a%2Bb#c`), `https://${host}/p/ABC123/?img_index=2&x=a%2Bb#c`);
+    // Links without params are returned as they are.
+    assert.equal(cleanUrl(`https://${host}/p/ABC123/`), `https://${host}/p/ABC123/`);
+    assert.equal(cleanUrl(`https://${host}/`), `https://${host}/`);
+  }
+  assert.equal(cleanUrl('HTTPS://WWW.Instagram.COM/p/ABC123/?%69gsh=a&IGSH=keep'), 'HTTPS://WWW.Instagram.COM/p/ABC123/?IGSH=keep');
+  assert.equal(cleanText('Look: https://www.instagram.com/p/ABC123/?igsh=MXZ2bHd4ZXo0dGRjbA==!'), 'Look: https://www.instagram.com/p/ABC123/!');
+});
+
+test('Instagram lookalikes and other Instagram hosts are untouched', () => {
+  for (const url of [
+    'https://notinstagram.com/p/ABC123/?igsh=abc',
+    'https://instagram.com.evil.test/p/ABC123/?igsh=abc',
+    'https://evil.test/instagram.com/p/ABC123/?igsh=abc',
+    'https://l.instagram.com/?u=https%3A%2F%2Fexample.com&igsh=abc',
+    'https://help.instagram.com/?igsh=abc',
+    'https://instagram.com@evil.test/p/ABC123/?igsh=abc',
+    'ftp://instagram.com/p/ABC123/?igsh=abc',
+  ]) assert.equal(cleanUrl(url), url);
+});
+
 test('lookalike hosts are untouched', () => {
   const urls = [
     'https://x.com.evil.com/a/status/1?s=20',
