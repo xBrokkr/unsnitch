@@ -70,7 +70,7 @@ New text goes into `messages.json` (in every language folder) and is used throug
 
 ## Good first issues
 
-- **More sites:** TikTok `_t` / `_r` / `is_from_webapp`. Add one entry to `SITE_RULES` in `clean.js` (a denylist: strip only the listed params), test it, and keep the "unrelated URLs are untouched" tests green. No new permissions or content-script matches. YouTube (#2) is a worked example.
+- **More sites:** pick a site whose share links carry trackers (see the open issues). Add one entry to `SITE_RULES` in `clean.js` (a denylist: strip only the listed params), test it, and keep the "unrelated URLs are untouched" tests green. No new permissions or content-script matches. YouTube (#2) is a worked example.
 - **Safari port** with `xcrun safari-web-extension-converter`.
 - **More languages:** English and Turkish are done. See [Adding a translation](#adding-a-translation).
 - **Docs and translations** of the README.

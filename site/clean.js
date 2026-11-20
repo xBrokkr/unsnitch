@@ -20,6 +20,8 @@
 
   // Other sites: remove only known trackers; preserve all other parameters.
   var SITE_RULES = [
+    { host: /^(?:www\.|m\.)?tiktok\.com$/i,
+      strip: { _t: true, _r: true, is_from_webapp: true, sender_device: true, is_copy_url: true, web_id: true } },
     { host: /^(?:(?:www|m|music)\.youtube\.com|youtube\.com|youtu\.be)$/i,
       strip: { si: true, pp: true, feature: true } },
     { host: /^open\.spotify\.com$/i,
