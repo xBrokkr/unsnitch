@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+- `cleanText` no longer deletes a trailing ellipsis (`…`) after a link: `https://x.com/a/status/1?s=20…` used to lose the `…` together with the tracker. Found while adding edge-case tests for encoded keys, odd query strings, hashes, ports and credentials, look-alike and IDN hosts, very long URLs and `cleanText` wrappers (#7).
+
 ## [1.1.0] - 2026-10-31
 
 ### Added
